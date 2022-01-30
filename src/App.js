@@ -1,23 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import React,{useEffect,useState} from 'react';
+
 
 function App() {
+  const [url,setUrl]=useState('')
+  const [count,setCount]=useState(0)
+  useEffect(()=>{
+    fetch('https://api.unsplash.com/photos/random',{
+      method:'GET',
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization':'Client-ID KWdc-WIBSN84n7QrOOkLGELnxdKB__OhXGhvnpjJtzg'
+      }
+    })
+    .then(res=>res.json())
+    .then(result=>{
+      // console.log(result.urls.raw);
+      setUrl(result.urls.full)
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  },[count])
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+    setCount(count+1)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <img src={url} alt='a random pic' />
+        <button style={{float:"right"}} onClick={e=>handleSubmit(e)}><i class="fas fa-arrow-right"></i></button>
     </div>
   );
 }
